@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # POOL !!!
 
@@ -50,8 +51,8 @@ class Ball:
             self.velocity.y = -abs(self.velocity.y)
 
     def apply_friction(self):
-        self.velocity.x *= 0.97
-        self.velocity.y *= 0.97
+        self.velocity.x *= 0.96
+        self.velocity.y *= 0.96
 
 def collide(ball_one, ball_two):
     distance = ((ball_one.x - ball_two.x) ** 2 + (ball_one.y - ball_two.y) ** 2) ** 0.5
@@ -72,16 +73,22 @@ balls = []
 ball_colours = [(255, 255, 0), (0, 0, 255), (255, 0, 0), (128, 0, 128), (255, 165, 0), (0, 128, 0), (165, 42, 42),
                 (0, 0, 0)]
 
-# the 8 ball is positioned in the middle, index 3, position 4
+eight_ball_position = (48.38, 60.5)
+
 ball_positions = [(68.125, 60.5), 
                   (58.25, 54.8), (58.25, 66.2), 
-                  (48.38, 49.1), (48.38, 60.5), (48.38, 71.9),
+                  (48.38, 49.1), (48.38, 71.9),
                   (38.5, 43.4), (38.5, 54.8), (38.5, 66.2), (38.5, 77.6),
                   (28.63, 37.7), (28.63, 49.1), (28.63, 60.5), (28.63, 71.9), (28.63, 83.3)]
 
-for i in range(1, 16):
-    color_index = (i - 1) % len(ball_colours)  # Using modulus to cycle through the available colors
-    balls.append(Ball(ball_positions[i - 1][0] * table_size_mod, ball_positions[i - 1][1] * table_size_mod, 5.7 * table_size_mod, ball_colours[color_index], screen, i))
+for i in range(15):
+    color_index = i % len(ball_colours)  
+    if i == 7: 
+        balls.append(Ball(eight_ball_position[0] * table_size_mod, eight_ball_position[1] * table_size_mod, 5.7 * table_size_mod, ball_colours[color_index], screen, i + 1))
+    else:
+        position = random.choice(ball_positions)
+        balls.append(Ball(position[0] * table_size_mod, position[1] * table_size_mod, 5.7 * table_size_mod, ball_colours[color_index], screen, i + 1))
+        ball_positions.remove(position)
 
 cueball = Ball(144.625 * table_size_mod, 60.5 * table_size_mod, 5.7 * table_size_mod, (255, 255, 255), screen)
 
